@@ -23,7 +23,7 @@ pipeline {
         script {      
           try {
             sh 'chmod +x shiftleft' 
-            sh './shiftleft sourceguard .'
+            sh './shiftleft code-scan .'
           } catch (Exception e) {
               echo "Security Test Failed" 
               env.flagError = "true"  
@@ -91,12 +91,12 @@ pipeline {
             sh 'docker-compose up -d'
         }
     }
-	stage ("Dynamic Analysis - DAST with OWASP ZAP") {
+	  stage ("Dynamic Analysis - DAST with OWASP ZAP") {
         steps {
             echo "Waiting app to get ready!!"
             sleep(10)
             sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.255.203/ -a -j || true"
-		}
+		    }
   	} 
   } 
 }
