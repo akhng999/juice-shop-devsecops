@@ -53,7 +53,7 @@ pipeline {
       steps {
         script {      
           try {
-            sh 'docker save bkimminich/juice-shop -o vwa.tar' 
+            sh 'docker save akhng999/juice-shop -o vwa.tar' 
             sh './shiftleft image-scan -i ./vwa.tar -t 1800'
           } catch (Exception e) {
             echo "Security Test Failed" 
