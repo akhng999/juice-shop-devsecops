@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  app:
+    image: bkimminich/juice-shop
+    expose:
+      - "8000"
+
+  nginx:
+    build: nginx
+    image: akhng999/nginx:ngx_appprotect
+    container_name: ngx_appprotect
+    ports:
+      - "80:80"
+    volumes:
+    #  - ./nginx/:/etc/nginx/conf.d
+      - ./nginx/config/:/etc/nginx/conf.d
+    depends_on:
+      - app
