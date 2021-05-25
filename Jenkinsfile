@@ -62,16 +62,6 @@ pipeline {
       }
     }
     stage('Dockerhub Approval Request') {
-      when {
-        expression { env.flagError == "true" }
-      }
-      steps {
-        script {
-          def userInput = input(id: 'confirm', message: 'This containers contains vulnerabilities. Push to Dockerhub?', parameters: [ [$class: 'BooleanParameterDefinition', defaultValue: false, description: 'Approve Code to Proceed', name: 'approve'] ])
-        }
-      }
-    }   
-    stage('Dockerhub Approval Request') {
         when {
             expression { env.flagError == "true" }
         }
@@ -81,7 +71,7 @@ pipeline {
                 parameters: [choice(name: 'Push to Docker Hub', choices: 'no\nyes', description: 'Choose "yes" if you want to push this build')]
             }
         }
-    }  
+    }
     stage('Pushing Image') {
         when {
             environment name: 'PUSH_TO_DOCKER_HUB', value: 'yes'
@@ -94,7 +84,7 @@ pipeline {
                 }
             }
         }
-    } 
+    }
     stage('Deploy the Applications') {
         steps {
             sh 'docker-compose up -d'
