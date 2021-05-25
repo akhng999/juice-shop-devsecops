@@ -50,7 +50,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log \
     && ln -sf /dev/stderr /var/log/nginx/error.log
 
 # Copy configuration files:
-COPY config/nginx.conf /etc/nginx/
+COPY nginx.conf /etc/nginx/
 COPY config/*.json /etc/nginx/conf.d/
 COPY config/default.conf /etc/nginx/conf.d/
 COPY entrypoint.sh  /root/

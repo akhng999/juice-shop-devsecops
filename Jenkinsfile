@@ -23,7 +23,7 @@ pipeline {
         script {      
           try {
             sh 'chmod +x shiftleft' 
-            sh './shiftleft code-scan ./src'
+            sh './shiftleft code-scan -s .'
           } catch (Exception e) {
               echo "Security Test Failed" 
               env.flagError = "true"  
