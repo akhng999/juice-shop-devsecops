@@ -32,7 +32,7 @@ pipeline {
               inProgressBuildResultType: 'FailBuild', 
               inProgressScanActionType: 'Queue', 
               overrideGlobalConfig: false,
-              releaseId: '1', 
+              releaseId: '151797', 
               remediationScanPreferenceType: 'RemediationScanIfAvailable', 
               srcLocation: "${WORKSPACE}",  
               personalAccessToken: '',  
