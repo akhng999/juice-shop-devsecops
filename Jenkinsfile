@@ -26,7 +26,7 @@ pipeline {
           try {
             //sh 'chmod +x shiftleft' 
             //sh './shiftleft code-scan -s .'
-            fodStaticAssessment bsiToken: '${JUICE_SHOP_BSI_TOKEN}', entitlementPreference: 'SubscriptionFirstThenSingleScan', inProgressBuildResultType: 'FailBuild', inProgressScanActionType: 'Queue', overrideGlobalConfig: true, personalAccessToken: '', releaseId: '1', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: 'https://github.com/akhng999/juice-shop-devsecops.git', tenantId: 'Westcon_Solutions_M_Sdn_Bhd_FMA_629384396', username: 'kokseong.khng@westcon.com', personalAccessToken: '${FORTIFY_ON_DEMAND_TOKEN}'
+            fodStaticAssessment bsiToken: '${JUICE_SHOP_BSI_TOKEN}', entitlementPreference: 'SubscriptionFirstThenSingleScan', inProgressBuildResultType: 'FailBuild', inProgressScanActionType: 'Queue', overrideGlobalConfig: true, releaseId: '1', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: 'https://github.com/akhng999/juice-shop-devsecops.git', tenantId: 'Westcon_Solutions_M_Sdn_Bhd_FMA_629384396', username: 'kokseong.khng@westcon.com', personalAccessToken: '${FORTIFY_ON_DEMAND_TOKEN}'
           } catch (Exception e) {
               echo "Security Test Failed" 
               env.flagError = "true"  
