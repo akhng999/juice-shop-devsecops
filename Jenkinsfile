@@ -6,7 +6,7 @@ pipeline {
       CHKP_CLOUDGUARD_ID = credentials("CHKP_CLOUDGUARD_ID")
       CHKP_CLOUDGUARD_SECRET = credentials("CHKP_CLOUDGUARD_SECRET")
       JUICE_SHOP_BSI_TOKEN = credentials("JUICE_SHOP_BSI_TOKEN")
-      FORTIFY_ON_DEMAND_TOKEN = credentials("FORTIFY_ON_DEMAND_TOKEN")
+      //FORTIFY_ON_DEMAND_TOKEN = credentials("FORTIFY_ON_DEMAND_TOKEN")
    }
   agent any
   stages {
@@ -26,14 +26,14 @@ pipeline {
           try {
             //sh 'chmod +x shiftleft' 
             //sh './shiftleft code-scan -s .'
-            fodStaticAssessment bsiToken: '${JUICE_SHOP_BSI_TOKEN}', entitlementPreference: 'SubscriptionFirstThenSingleScan', inProgressBuildResultType: 'FailBuild', inProgressScanActionType: 'Queue', overrideGlobalConfig: true, releaseId: '1', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: 'https://github.com/akhng999/juice-shop-devsecops.git', tenantId: 'Westcon_Solutions_M_Sdn_Bhd_FMA_629384396', username: 'kokseong.khng@westcon.com', personalAccessToken: '${FORTIFY_ON_DEMAND_TOKEN}'
+            fodStaticAssessment bsiToken: '${JUICE_SHOP_BSI_TOKEN}', entitlementPreference: 'SubscriptionFirstThenSingleScan', inProgressBuildResultType: 'FailBuild', inProgressScanActionType: 'Queue', overrideGlobalConfig: true, releaseId: '1', remediationScanPreferenceType: 'RemediationScanIfAvailable', srcLocation: 'https://github.com/akhng999/juice-shop-devsecops.git',  personalAccessToken: '',  tenantId: '', username: ''
           } catch (Exception e) {
               echo "Security Test Failed" 
               env.flagError = "true"  
             }
           }
       }
-    }
+    } /*
     stage('Code approval request') {
       when {
         expression { env.flagError == "true" }
@@ -100,6 +100,6 @@ pipeline {
             sleep(10)
             sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.255.212/ -a -j || true"
 		    }
-  	} 
+  	}  */
   } 
 }
