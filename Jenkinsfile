@@ -142,7 +142,7 @@ pipeline {
               mkdir -p $PWD/reports $PWD/artifacts;
               docker run \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
-                bin/arachni http://192.168.255.212 --checks=*,-common_*,-backup_*,-backdoors --report-save-path=reports/juice-shop.afr;
+                bin/arachni http://192.168.255.212 --checks=active/*,-common_*,-backup_*,-backdoors --report-save-path=reports/juice-shop.afr;
               docker run --name=arachni_report  \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
                 bin/arachni_reporter reports/juice-shop.afr --reporter=html:outfile=reports/juice-ship-report.html.zip;
