@@ -48,7 +48,7 @@ pipeline {
             }
           }
       }
-    } /*
+    } 
     stage('Code approval request') {
       when {
         expression { env.flagError == "true" }
@@ -103,12 +103,12 @@ pipeline {
                 }
             }
         }
-    }
+    } 
     stage('Deploy the Applications') {
         steps {
             sh 'docker-compose up -d'
         }
-    } */
+    } 
 	  stage ("Dynamic Analysis - DAST") {
       parallel {
         stage ('OWASP ZAP') {
