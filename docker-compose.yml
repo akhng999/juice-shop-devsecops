@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   app:
-    build: src
+#    build: src
     image: akhng999/juice-shop
     expose:
       - "3000"
