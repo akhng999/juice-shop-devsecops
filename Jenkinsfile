@@ -24,8 +24,11 @@ pipeline {
       steps {
         script {      
           try {
+            /* Check Point shiftleft. There are some issue the scan return kernel panic */
             //sh 'chmod +x shiftleft' 
             //sh './shiftleft code-scan -s .'
+            
+            //This is Fortify on Demand, which will take around 20 mins to upload and complete scan
             fodStaticAssessment([
               bsiToken: '${JUICE_SHOP_BSI_TOKEN}', 
               entitlementPreference: 'SubscriptionFirstThenSingleScan', 
@@ -105,13 +108,35 @@ pipeline {
         steps {
             sh 'docker-compose up -d'
         }
-    }
-	  stage ("Dynamic Analysis - DAST with OWASP ZAP") {
-        steps {
+    } */
+	  stage ("Dynamic Analysis - DAST") {
+      parallel {
+        stage ('OWASP ZAP') {
+          steps {
             echo "Waiting app to get ready!!"
             sleep(10)
             sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.255.212/ -a -j || true"
-		    }
-  	}  */
+		      }
+        }
+        stage('Arachni') {
+          steps {
+            echo "Waiting app to get ready!!"
+            sleep(10)
+            sh '''
+              mkdir -p $PWD/reports $PWD/artifacts;
+              docker run \
+                -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
+                bin/arachni http://192.168.255.212 --report-save-path=reports/juice-shop.afr;
+              docker run --name=arachni_report  \
+                -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
+                bin/arachni_reporter reports/juice-shop.afr --reporter=html:outfile=reports/juice-ship-report.html.zip;
+              docker cp arachni_report:/arachni/reports/juice-shop-report.html.zip $PWD/artifacts;
+              docker rm arachni_report;
+            '''
+            archiveArtifacts artifacts: 'artifacts/**', fingerprint: true
+          }
+        }
+      }
+  	}  
   } 
 }
