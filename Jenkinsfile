@@ -21,34 +21,49 @@ pipeline {
         }
     }
     stage('Scan source code before containerizing App') {    
-      steps {
-        script {      
-          try {
-            /* Check Point shiftleft. There are some issue the scan return kernel panic */
-            //sh 'chmod +x shiftleft' 
-            //sh './shiftleft code-scan -s .'
-            
-            //This is Fortify on Demand, which will take around 20 mins to upload and complete scan
-            fodStaticAssessment([
-              bsiToken: '${JUICE_SHOP_BSI_TOKEN}', 
-              entitlementPreference: 'SubscriptionFirstThenSingleScan', 
-              inProgressBuildResultType: 'FailBuild', 
-              inProgressScanActionType: 'Queue', 
-              overrideGlobalConfig: false,
-              releaseId: '151797', 
-              remediationScanPreferenceType: 'RemediationScanIfAvailable', 
-              srcLocation: "${WORKSPACE}",  
-              personalAccessToken: '',  
-              tenantId: '', 
-              username: ''
-            ]) 
-          } catch (Exception e) {
-              echo "Security Test Failed" 
-              env.flagError = "true"  
+      parallel {
+        stage ('Scanning with Check Point Shifleft') {
+          steps {
+            script {      
+              try {
+                /* Check Point shiftleft. There are some issue the scan return kernel panic */
+                sh 'chmod +x shiftleft' 
+                sh './shiftleft code-scan -s .'
+              } catch (Exception e) {
+                  echo "Security Test Failed" 
+                  env.flagError = "true"  
+              }
             }
           }
+        }
+        stage ('Scanning with SonarQube') {
+          steps {
+            echo "===========Performing Sonar Scan============"
+            //sh "${tool("sonarqube")}/bin/sonar-scanner"
+          }
+        }
+        stage ('Scanning with Fortify on Demand') {
+          steps {
+            echo "===========Performing Fortify On Demand Scanning============"
+                  //This is Fortify on Demand, which will take around 20 mins to upload and complete scan
+                  /*
+                  fodStaticAssessment([
+                    bsiToken: '${JUICE_SHOP_BSI_TOKEN}', 
+                    entitlementPreference: 'SubscriptionFirstThenSingleScan', 
+                    inProgressBuildResultType: 'FailBuild', 
+                    inProgressScanActionType: 'Queue', 
+                    overrideGlobalConfig: false,
+                    releaseId: '151797', 
+                    remediationScanPreferenceType: 'RemediationScanIfAvailable', 
+                    srcLocation: "${WORKSPACE}",  
+                    personalAccessToken: '',  
+                    tenantId: '', 
+                    username: ''
+                  ]) */
+          }
+        }
       }
-    } 
+		} 
     stage('Code approval request') {
       when {
         expression { env.flagError == "true" }
