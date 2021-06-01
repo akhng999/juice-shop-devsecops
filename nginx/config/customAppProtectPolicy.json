@@ -7,6 +7,9 @@
        },
        "applicationLanguage": "utf-8",
        "enforcementMode": "blocking",
+       "signature-settings": {
+           "minimumAccuracyForAutoAddedSignatures": "low"
+       },
        "blocking-settings" : {
           "evasions" : [
              {
@@ -30,7 +33,12 @@
              {
                 "description" : "Header name with no header value",
                 "enabled" : true
+             },
+             {
+                "description" : "Host header contains IP address",
+                "enabled" : false 
              }
+
           ],
           "violations" : [
              {
@@ -169,6 +177,11 @@
                 "name" : "VIOL_GRPC_METHOD"
              },
              {
+		"block": false,
+		"description": "Illegal meta character in value",
+		"name": "VIOL_PARAMETER_VALUE_METACHAR"
+	     },
+             {
                "name": "VIOL_CSRF",
                "alarm": true,
                "block": true
@@ -268,7 +281,7 @@
           },
           {
              "alarm" : true,
-             "block" : false,
+             "block" : true,
              "name" : "Server Side Code Injection Signatures"
           },
           {
@@ -296,21 +309,7 @@
              "disallowFileUploadOfExecutables" : true,
              "clickjackingProtection": true,
              "allowRenderingInFrames": "never"
-          },
-          {
-            "name": "/taskManager/forgot_password",
-            "html5CrossOriginRequestsEnforcement": {
-                "enforcementMode": "enforce",
-                "crossDomainAllowedOrigin": [
-                    {
-                        "includeSubDomains": false,
-                        "originName": "taskManager.com",
-                        "originPort": "all",
-                        "originProtocol": "http/https"
-                    }
-                ]
-            }
-        }
+          }
        ],
        "xml-profiles" : [
           {
