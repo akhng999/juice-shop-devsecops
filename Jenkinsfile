@@ -39,7 +39,8 @@ pipeline {
         stage ('Scanning with SonarQube') {
           steps {
             echo "===========Performing Sonar Scan============"
-            //sh "${tool("sonarqube")}/bin/sonar-scanner"
+            //sh "docker run -d --name sonarqube -p 9000:9000 -v /home/seong/sonarqube/data:/opt/sonarqube/data -v /home/seong/sonarqube/extensions:/opt/sonarqube/extensions sonarqube"
+            sh "${tool("sonarqube")}/bin/sonar-scanner"
           }
         }
         stage ('Scanning with Fortify on Demand') {
@@ -141,7 +142,7 @@ pipeline {
               mkdir -p $PWD/reports $PWD/artifacts;
               docker run \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
-                bin/arachni http://192.168.255.212 --report-save-path=reports/juice-shop.afr;
+                bin/arachni http://192.168.255.212 --checks=*,-common_*,-backup_*,-backdoors --report-save-path=reports/juice-shop.afr;
               docker run --name=arachni_report  \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
                 bin/arachni_reporter reports/juice-shop.afr --reporter=html:outfile=reports/juice-ship-report.html.zip;
