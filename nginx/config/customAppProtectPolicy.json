@@ -232,6 +232,10 @@
              "type" : "wildcard",
              "allowed" : true,
              "responseCheck" : true
+          },
+          {
+             "name" : "txt",
+             "allowed" : false
           }
        ],
        "json-profiles" : [
@@ -294,6 +298,26 @@
              "block" : false,
              "name" : "Other Application Attacks Signatures"
           },
+	  {
+             "alarm" : true,
+             "block" : true,
+             "name" : "Path Traversal Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : true,
+             "name" : "Predictable Resource Location Signatures"
+          },
+	  {
+             "alarm" : true,
+             "block" : true,
+             "name" : "OS Command Injection Signatures"
+          },
+          {
+             "alarm" : true,
+             "block" : true,
+             "name" : "Directory Indexing Signatures"
+          },
           {
              "alarm" : true,
              "block" : true,
@@ -309,6 +333,12 @@
              "disallowFileUploadOfExecutables" : true,
              "clickjackingProtection": true,
              "allowRenderingInFrames": "never"
+          },
+          {
+             "name" : "/ftp*",
+             "type" : "wildcard",
+             "method" : "*",
+             "isAllowed" : false
           }
        ],
        "xml-profiles" : [
