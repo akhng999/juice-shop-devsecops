@@ -40,7 +40,9 @@ pipeline {
           steps {
             echo "===========Performing Sonar Scan============"
             //sh "docker run -d --name sonarqube -p 9000:9000 -v /home/seong/sonarqube/data:/opt/sonarqube/data -v /home/seong/sonarqube/extensions:/opt/sonarqube/extensions sonarqube"
-            sh "${tool("sonarqube")}/bin/sonar-scanner"
+            withSonarQubeEnv(credentialsId: 'sonarqube-token') {
+              sh "${tool("sonarqube")}/bin/sonar-scanner"
+            }
           }
         }
         stage ('Scanning with Fortify on Demand') {
