@@ -40,7 +40,7 @@ pipeline {
           steps {
             echo "===========Performing Sonar Scan============"
             //sh "docker run -d --name sonarqube -p 9000:9000 -v /home/seong/sonarqube/data:/opt/sonarqube/data -v /home/seong/sonarqube/extensions:/opt/sonarqube/extensions sonarqube"
-            withSonarQubeEnv(credentialsId: 'sonarqube-token') {
+            withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonarqube-token') {
               sh "${tool("sonarqube")}/bin/sonar-scanner"
             }
           }
