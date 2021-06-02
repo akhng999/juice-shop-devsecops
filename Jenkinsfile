@@ -131,7 +131,7 @@ pipeline {
           steps {
             echo "Waiting app to get ready!!"
             sleep(10)
-            sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.255.212/ -a -j || true"
+            sh "docker run -t owasp/zap2docker-stable zap-baseline.py -t http://192.168.255.248/ -a -j || true"
 		      }
         }
         stage('Arachni') {
@@ -142,7 +142,9 @@ pipeline {
               mkdir -p $PWD/reports $PWD/artifacts;
               docker run \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
-                bin/arachni http://192.168.255.212 --checks=active/*,-common_*,-backup_*,-backdoors --report-save-path=reports/juice-shop.afr;
+                bin/arachni http://192.168.255.248/ --checks=* --scope-directory-depth-limit=1 --scope-page-limit=1 \
+                --http-user-agent="Mozilla/5.0 (X11; Linux i686; rv:6.0) Gecko/20100101 Firefox/6.0" \
+                --report-save-path=reports/juice-shop.afr;
               docker run --name=arachni_report  \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
                 bin/arachni_reporter reports/juice-shop.afr --reporter=html:outfile=reports/juice-ship-report.html.zip;
