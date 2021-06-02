@@ -39,7 +39,7 @@ pipeline {
         stage ('Scanning with SonarQube') {
           steps {
             echo "===========Performing Sonar Scan============"
-            //sh "docker run -d --name sonarqube -p 9000:9000 -v /home/seong/sonarqube/data:/opt/sonarqube/data -v /home/seong/sonarqube/extensions:/opt/sonarqube/extensions sonarqube"
+            //sh "docker run -d --name sonarqube -p 9000:9000 -v ~/sonarqube/data:/opt/sonarqube/data -v ~/sonarqube/extensions:/opt/sonarqube/extensions sonarqube"
             withSonarQubeEnv(installationName: 'sonarqube', credentialsId: 'sonarqube-token') {
               sh "${tool("sonarqube")}/bin/sonar-scanner"
             }
@@ -149,7 +149,7 @@ pipeline {
                 --report-save-path=reports/juice-shop.afr;
               docker run --name=arachni_report  \
                 -v $PWD/reports:/arachni/reports ahannigan/docker-arachni \
-                bin/arachni_reporter reports/juice-shop.afr --reporter=html:outfile=reports/juice-ship-report.html.zip;
+                bin/arachni_reporter reports/juice-shop.afr --reporter=html:outfile=reports/juice-shop-report.html.zip;
               docker cp arachni_report:/arachni/reports/juice-shop-report.html.zip $PWD/artifacts;
               docker rm arachni_report;
             '''
